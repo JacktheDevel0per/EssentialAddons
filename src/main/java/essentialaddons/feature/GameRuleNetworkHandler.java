@@ -4,6 +4,7 @@ import essentialaddons.EssentialAddons;
 import essentialaddons.EssentialSettings;
 import essentialaddons.mixins.gameRuleSync.RuleInvoker;
 import essentialaddons.utils.NetworkHandler;
+import essentialaddons.utils.NetworkUtils;
 import essentialaddons.utils.ducks.IRule;
 import io.netty.buffer.Unpooled;
 import net.minecraft.nbt.NbtCompound;
@@ -35,13 +36,13 @@ public class GameRuleNetworkHandler extends NetworkHandler {
 	public void updatePlayerStatus(ServerPlayerEntity player) {
 		PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer()).writeVarInt(15);
 		byteBuf.writeBoolean(EssentialSettings.gameRuleSync && (EssentialSettings.gameRuleNonOp || player.hasPermissionLevel(2)));
-		player.networkHandler.sendPacket(new CustomPayloadS2CPacket(GAME_RULE_CHANNEL, byteBuf));
+		player.networkHandler.sendPacket(NetworkUtils.getCustomPayloadPacket(GAME_RULE_CHANNEL, byteBuf));
 	}
 
 	public void sendAllRules(ServerPlayerEntity player) {
 		PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer()).writeVarInt(DATA);
-		player.networkHandler.sendPacket(new CustomPayloadS2CPacket(
-			GAME_RULE_CHANNEL, byteBuf.writeNbt(player.server.getGameRules().toNbt())
+		player.networkHandler.sendPacket(NetworkUtils.getCustomPayloadPacket(
+				GAME_RULE_CHANNEL, byteBuf.writeNbt(player.server.getGameRules().toNbt())
 		));
 	}
 
@@ -65,7 +66,7 @@ public class GameRuleNetworkHandler extends NetworkHandler {
 		compound.putString(ruleName, ruleValue);
 		this.getValidPlayers().forEach(player -> {
 			PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer()).writeVarInt(DATA);
-			player.networkHandler.sendPacket(new CustomPayloadS2CPacket(
+			player.networkHandler.sendPacket(NetworkUtils.getCustomPayloadPacket(
 				GAME_RULE_CHANNEL, byteBuf.writeNbt(compound)
 			));
 		});

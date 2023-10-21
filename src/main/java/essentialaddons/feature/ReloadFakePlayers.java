@@ -34,9 +34,12 @@ public class ReloadFakePlayers {
             return;
         }
         if (gameProfile.getProperties().containsKey("textures")) {
+            //TODO: FIX THIS! DO NOT PR WITH THIS LIKE THIS!
+            //#if MC < 12002
             AtomicReference<GameProfile> result = new AtomicReference<>();
             SkullBlockEntity.loadProperties(gameProfile, result::set);
             gameProfile = result.get();
+            //#endif
         }
         //#if MC >= 11900 && MC < 11903
         //$$EntityPlayerMPFake instance = EntityPlayerMPFakeInvoker.init(server, server.getOverworld(), gameProfile, false, null);

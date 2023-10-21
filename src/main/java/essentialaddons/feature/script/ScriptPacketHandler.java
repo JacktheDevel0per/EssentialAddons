@@ -7,6 +7,7 @@ import carpet.script.exception.InternalExpressionException;
 import carpet.script.value.*;
 import essentialaddons.EssentialAddons;
 import essentialaddons.utils.NetworkHandler;
+import essentialaddons.utils.NetworkUtils;
 import io.netty.buffer.Unpooled;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -60,7 +61,7 @@ public class ScriptPacketHandler extends NetworkHandler {
 			}
 
 			ArgumentParser parser = new ArgumentParser(values);
-			player.networkHandler.sendPacket(new CustomPayloadS2CPacket(SCRIPT_HANDLER, parser.parse()));
+			player.networkHandler.sendPacket(NetworkUtils.getCustomPayloadPacket(SCRIPT_HANDLER, parser.parse()));
 			return Value.NULL;
 		});
 

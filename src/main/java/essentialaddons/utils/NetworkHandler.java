@@ -41,9 +41,10 @@ public abstract class NetworkHandler {
 	}
 
 	public void sayHello(ServerPlayerEntity player) {
-		player.networkHandler.sendPacket(new CustomPayloadS2CPacket(
+		player.networkHandler.sendPacket(NetworkUtils.getCustomPayloadPacket(
 			this.getNetworkChannel(),
 			new PacketByteBuf(Unpooled.buffer()).writeVarInt(HELLO).writeVarInt(this.getVersion())
+
 		));
 	}
 
